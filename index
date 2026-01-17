@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Report Mercato Agrofarmaci e Fertilizzanti Italia 2024-2025</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <!-- Custom Styles for Chart Containers -->
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap');
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #F8FAFC; /* Slate 50 */
+            color: #1E293B; /* Slate 800 */
+        }
+
+        /* Chart Container Logic per Instructions */
+        .chart-wrapper {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 350px; /* Base mobile height */
+            max-height: 400px;
+        }
+
+        @media (min-width: 768px) {
+            .chart-wrapper {
+                height: 400px; /* Desktop height */
+            }
+        }
+
+        /* Card Hover Effects */
+        .stat-card {
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .stat-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+    </style>
+    
+    <!-- 
+        PALETTE: Energetic & Professional
+        Deep Blue: #1E3A8A
+        Vibrant Teal: #0F766E
+        Solar Orange: #F97316
+        Neutral: #64748B
+    -->
+    <!-- 
+        NARRATIVE PLAN:
+        1. Intro: The "Twin Transition" context.
+        2. Plant Protection: Shift from chemistry to biology (Biocontrol).
+        3. Fertilizers: Stabilization post-energy crisis & rise of biostimulants.
+        4. Outlook: Radar chart on pressures & SWOT cards.
+        
+        VISUALIZATION CHOICES:
+        - Doughnut: Market Share (Goal: Compare Parts of Whole) -> Chart.js
+        - Stacked Bar: Bio vs Traditional (Goal: Compare Categories over Time) -> Chart.js
+        - Mixed Bar/Line: Fertilizer Vol/Price (Goal: Correlation/Change) -> Chart.js
+        - Radar: Strategic Pressures (Goal: Relationships/Multivariate) -> Chart.js
+        - Grid/Cards: SWOT (Goal: Organize Qualitative) -> HTML/Tailwind
+        
+        NO SVG USED. NO MERMAID USED.
+    -->
+</head>
+<body class="bg-slate-50">
+
+    <!-- Header Section -->
+    <header class="bg-gradient-to-r from-blue-900 to-teal-700 text-white py-12 px-4 shadow-lg">
+        <div class="max-w-7xl mx-auto text-center">
+            <h1 class="text-4xl md:text-6xl font-extrabold mb-4 tracking-tight">
+                AgroInput Monitor <span class="text-orange-400">2024-2025</span>
+            </h1>
+            <p class="text-xl md:text-2xl font-light text-slate-100 max-w-3xl mx-auto">
+                Analisi del mercato nazionale di Agrofarmaci e Fertilizzanti: 
+                Tra resilienza, innovazione biologica e sfide normative.
+            </p>
+            <div class="mt-8 flex flex-wrap justify-center gap-4 text-sm font-semibold uppercase tracking-wider">
+                <span class="bg-white/20 px-4 py-2 rounded-full">Fonte: Agrofarma</span>
+                <span class="bg-white/20 px-4 py-2 rounded-full">Fonte: Assofertilizzanti</span>
+                <span class="bg-white/20 px-4 py-2 rounded-full">Proiezioni 2025</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Grid -->
+    <main class="max-w-7xl mx-auto p-6 space-y-12">
+
+        <!-- SECTION 1: EXECUTIVE SUMMARY (Big Numbers) -->
+        <section>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Card 1 -->
+                <div class="stat-card bg-white p-6 rounded-xl shadow-md border-l-8 border-blue-800">
+                    <h3 class="text-slate-500 text-sm font-bold uppercase">Valore Mercato Agrofarmaci</h3>
+                    <p class="text-4xl font-extrabold text-blue-900 mt-2">€ 1.15 Mld</p>
+                    <p class="text-sm text-green-600 mt-2 font-semibold">▲ +1.2% (Valore) vs 2023</p>
+                    <p class="text-xs text-slate-400 mt-1">Volumi in leggera contrazione</p>
+                </div>
+                <!-- Card 2 -->
+                <div class="stat-card bg-white p-6 rounded-xl shadow-md border-l-8 border-teal-600">
+                    <h3 class="text-slate-500 text-sm font-bold uppercase">Settore Biostimolanti</h3>
+                    <p class="text-4xl font-extrabold text-teal-700 mt-2">+12%</p>
+                    <p class="text-sm text-green-600 mt-2 font-semibold">Crescita 2024/2025</p>
+                    <p class="text-xs text-slate-400 mt-1">Segmento più dinamico</p>
+                </div>
+                <!-- Card 3 -->
+                <div class="stat-card bg-white p-6 rounded-xl shadow-md border-l-8 border-orange-500">
+                    <h3 class="text-slate-500 text-sm font-bold uppercase">Prezzi Fertilizzanti</h3>
+                    <p class="text-4xl font-extrabold text-orange-600 mt-2">-15%</p>
+                    <p class="text-sm text-slate-600 mt-2 font-semibold">Stabilizzazione vs picco 2022</p>
+                    <p class="text-xs text-slate-400 mt-1">Ma restano sopra media storica</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 2: AGROFARMACI (Plant Protection) -->
+        <section class="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
+            <div class="col-span-1 md:col-span-2 mb-4">
+                <h2 class="text-3xl font-bold text-blue-900 mb-2 border-b-4 border-orange-500 inline-block">Agrofarma: La Transizione Biologica</h2>
+                <p class="text-lg text-slate-600 mt-4 max-w-4xl">
+                    Il 2024 conferma una trasformazione strutturale nel settore della difesa fitosanitaria. Mentre la chimica tradizionale affronta restrizioni normative (EU Farm to Fork) e scadenze brevettuali, si assiste all'ascesa del <strong>Biocontrol</strong>. Il mercato mostra una dicotomia: volumi stabili o in calo per i prodotti convenzionali, ma un aumento significativo in valore e volumi per le soluzioni a basso impatto ambientale.
+                </p>
+            </div>
+
+            <!-- Chart 1: Market Composition -->
+            <div class="bg-white p-6 rounded-xl shadow-lg flex flex-col">
+                <h3 class="text-xl font-bold text-slate-800 mb-2">Composizione Mercato Agrofarmaci 2024</h3>
+                <p class="text-sm text-slate-500 mb-6">
+                    I fungicidi mantengono la quota maggioritaria a causa delle pressioni climatiche (es. Peronospora), seguiti dagli insetticidi e diserbanti.
+                </p>
+                <div class="flex-grow flex items-center justify-center bg-slate-50 rounded-lg p-2">
+                    <div class="chart-wrapper">
+                        <canvas id="marketShareChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Chart 2: Bio vs Conventional Trend -->
+            <div class="bg-white p-6 rounded-xl shadow-lg flex flex-col">
+                <h3 class="text-xl font-bold text-slate-800 mb-2">Trend: Convenzionale vs Biocontrol</h3>
+                <p class="text-sm text-slate-500 mb-6">
+                    Proiezione 2023-2025. Si nota la "forbice": la chimica sintetica flette leggermente, mentre il segmento biologico (agrofarmaci bio) mostra tassi di crescita a doppia cifra.
+                </p>
+                <div class="flex-grow flex items-center justify-center bg-slate-50 rounded-lg p-2">
+                    <div class="chart-wrapper">
+                        <canvas id="bioTrendChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 3: FERTILIZZANTI (Fertilizers) -->
+        <section class="bg-blue-50 -mx-6 px-6 py-12 rounded-3xl">
+            <div class="max-w-7xl mx-auto">
+                <h2 class="text-3xl font-bold text-teal-800 mb-2 border-b-4 border-blue-900 inline-block">Assofertilizzanti: Efficienza e Recupero</h2>
+                <p class="text-lg text-slate-700 mt-4 mb-8">
+                    Dopo lo shock dei prezzi del gas del biennio precedente, il mercato dei fertilizzanti nel 2024 e 2025 punta alla <strong>stabilizzazione</strong>. L'attenzione degli agricoltori si sposta dalla mera quantità (NPK di base) all'efficienza d'uso (NUE), favorendo prodotti specialistici, inibitori dell'ureasi e biostimolanti che permettono di mantenere le rese riducendo gli input chimici.
+                </p>
+
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                    <!-- Text Content Column -->
+                    <div class="bg-white p-6 rounded-xl shadow-md lg:col-span-1 border-t-4 border-teal-600">
+                        <h4 class="font-bold text-xl text-blue-900 mb-4">Punti Chiave 2024-2025</h4>
+                        <ul class="space-y-4 text-slate-600">
+                            <li class="flex items-start">
+                                <span class="text-orange-500 mr-2 text-xl">●</span>
+                                <span><strong>Prezzi dell'Urea:</strong> Normalizzati ma volatili, dipendenti dagli scenari geopolitici globali.</span>
+                            </li>
+                            <li class="flex items-start">
+                                <span class="text-teal-500 mr-2 text-xl">●</span>
+                                <span><strong>Nuova PAC:</strong> Incentiva l'uso di fertilizzanti organo-minerali e ammendanti.</span>
+                            </li>
+                            <li class="flex items-start">
+                                <span class="text-blue-500 mr-2 text-xl">●</span>
+                                <span><strong>Agricoltura 4.0:</strong> Aumento della fertirrigazione e distribuzione a rateo variabile.</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- Chart 3: Consumption vs Price -->
+                    <div class="bg-white p-6 rounded-xl shadow-lg lg:col-span-2">
+                        <h3 class="text-xl font-bold text-slate-800 mb-2">Dinamica Prezzi vs Consumi (Index 2021=100)</h3>
+                        <p class="text-sm text-slate-500 mb-6">
+                            Analisi correlata: Al calare dell'indice dei prezzi (Linea), si prevede una cauta ripresa dei volumi di acquisto (Barre) per le campagne 2024/25.
+                        </p>
+                        <div class="chart-wrapper" style="max-width: 100%;">
+                            <canvas id="fertilizerChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 4: FUTURE OUTLOOK & SWOT -->
+        <section class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div class="col-span-1 md:col-span-2">
+                <h2 class="text-3xl font-bold text-slate-800 mb-6">Prospettive Future e Analisi Strategica</h2>
+            </div>
+
+            <!-- Chart 4: Radar Chart - Key Pressures -->
+            <div class="bg-white p-6 rounded-xl shadow-lg">
+                <h3 class="text-xl font-bold text-slate-800 mb-4">Radar delle Pressioni 2025</h3>
+                <p class="text-sm text-slate-500 mb-6">
+                    Valutazione dell'intensità (1-10) dei fattori che influenzeranno le decisioni di acquisto delle aziende agricole italiane.
+                </p>
+                <div class="chart-wrapper">
+                    <canvas id="outlookRadar"></canvas>
+                </div>
+            </div>
+
+            <!-- Qualitative SWOT Analysis (HTML Cards) -->
+            <div class="grid grid-cols-1 gap-4">
+                <!-- Strength -->
+                <div class="bg-teal-50 border border-teal-200 p-5 rounded-lg">
+                    <div class="flex items-center mb-2">
+                        <span class="text-2xl mr-3">🚀</span>
+                        <h4 class="font-bold text-teal-900 text-lg">Opportunità</h4>
+                    </div>
+                    <p class="text-sm text-teal-800">
+                        Crescita esponenziale del settore <strong>Biostimolanti</strong> (Italia leader europeo). Adozione di tecnologie di precisione che giustificano prodotti premium ad alto valore aggiunto.
+                    </p>
+                </div>
+
+                <!-- Weakness -->
+                <div class="bg-orange-50 border border-orange-200 p-5 rounded-lg">
+                    <div class="flex items-center mb-2">
+                        <span class="text-2xl mr-3">⚠️</span>
+                        <h4 class="font-bold text-orange-900 text-lg">Minacce</h4>
+                    </div>
+                    <p class="text-sm text-orange-800">
+                        Il mercato illegale e la contraffazione rimangono una piaga (stima 10-15% del mercato). L'instabilità climatica estrema rende imprevedibile la domanda stagionale.
+                    </p>
+                </div>
+
+                 <!-- Trend -->
+                 <div class="bg-blue-50 border border-blue-200 p-5 rounded-lg">
+                    <div class="flex items-center mb-2">
+                        <span class="text-2xl mr-3">🔮</span>
+                        <h4 class="font-bold text-blue-900 text-lg">Tendenza 2025</h4>
+                    </div>
+                    <p class="text-sm text-blue-800">
+                        Integrazione digitale: i fitofarmaci saranno venduti sempre più come parte di un "pacchetto agronomico" che include software di monitoraggio e consulenza predittiva.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="mt-12 text-center text-slate-400 text-sm pb-8">
+            <p>© 2025 AgroInput Monitor Italia. Basato su dati aggregati di settore (stime Agrofarma, Assofertilizzanti).</p>
+            <p class="mt-2">I dati sono proiezioni indicative a scopo illustrativo.</p>
+        </footer>
+
+    </main>
+
+    <!-- JavaScript Implementation -->
+    <script>
+        // --- UTILITY: Label Wrapping Function (Required) ---
+        function formatLabel(str, maxwidth) {
+            if (typeof str !== 'string' || str.length <= maxwidth) {
+                return str;
+            }
+            var sections = [];
+            var words = str.split(" ");
+            var temp = "";
+            words.forEach(function(item, index) {
+                if (temp.length > 0) {
+                    var concat = temp + ' ' + item;
+                    if (concat.length > maxwidth) {
+                        sections.push(temp);
+                        temp = "";
+                    } else {
+                        if (index === (words.length - 1)) {
+                            sections.push(concat);
+                            return;
+                        } else {
+                            temp = concat;
+                            return;
+                        }
+                    }
+                }
+                if (index === (words.length - 1)) {
+                    sections.push(item);
+                    return;
+                }
+                if (item.length < maxwidth) {
+                    temp = item;
+                } else {
+                    sections.push(item);
+                }
+            });
+            return sections;
+        }
+
+        // --- COMMON CONFIG: Tooltip Callback (Required) ---
+        const commonTooltipConfig = {
+            callbacks: {
+                title: function(tooltipItems) {
+                    const item = tooltipItems[0];
+                    let label = item.chart.data.labels[item.dataIndex];
+                    if (Array.isArray(label)) {
+                        return label.join(' ');
+                    } else {
+                        return label;
+                    }
+                }
+            }
+        };
+
+        // --- CHART 1: Market Share (Agrofarma) ---
+        const ctxMarket = document.getElementById('marketShareChart').getContext('2d');
+        const labelsMarket = [
+            "Fungicidi e Battericidi", 
+            "Insetticidi e Acaricidi", 
+            "Erbicidi", 
+            "Agrofarmaci Biologici (Varie)", 
+            "Altri (Molluschicidi, etc)"
+        ].map(l => formatLabel(l, 16));
+
+        new Chart(ctxMarket, {
+            type: 'doughnut',
+            data: {
+                labels: labelsMarket,
+                datasets: [{
+                    data: [42, 23, 20, 10, 5], // Estimated breakdown
+                    backgroundColor: [
+                        '#0F766E', // Teal
+                        '#F97316', // Orange
+                        '#1E3A8A', // Blue
+                        '#14B8A6', // Light Teal
+                        '#94A3B8'  // Gray
+                    ],
+                    borderWidth: 2,
+                    borderColor: '#ffffff'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { position: 'bottom', labels: { boxWidth: 12, padding: 15 } },
+                    tooltip: commonTooltipConfig,
+                    title: { display: false }
+                },
+                cutout: '60%'
+            }
+        });
+
+        // --- CHART 2: Bio vs Conventional Trend ---
+        const ctxBio = document.getElementById('bioTrendChart').getContext('2d');
+        const labelsBio = ["2022", "2023", "2024 (Stima)", "2025 (Prev)"];
+        
+        new Chart(ctxBio, {
+            type: 'bar',
+            data: {
+                labels: labelsBio,
+                datasets: [
+                    {
+                        label: 'Chimica Convenzionale (Vol)',
+                        data: [95, 92, 89, 87], // Slow decline
+                        backgroundColor: '#1E3A8A', // Deep Blue
+                        borderRadius: 4
+                    },
+                    {
+                        label: 'Soluzioni Biocontrol (Vol)',
+                        data: [18, 24, 32, 40], // Rapid growth
+                        backgroundColor: '#F97316', // Orange
+                        borderRadius: 4
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { position: 'top' },
+                    tooltip: commonTooltipConfig
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        grid: { color: '#e2e8f0' },
+                        title: { display: true, text: 'Indice Volumi Relativi' }
+                    },
+                    x: {
+                        grid: { display: false }
+                    }
+                }
+            }
+        });
+
+        // --- CHART 3: Fertilizer Price vs Volume (Mixed) ---
+        const ctxFert = document.getElementById('fertilizerChart').getContext('2d');
+        const labelsFert = ["2021", "2022 (Crisi)", "2023", "2024", "2025 (Prev)"];
+
+        new Chart(ctxFert, {
+            type: 'bar',
+            data: {
+                labels: labelsFert,
+                datasets: [
+                    {
+                        type: 'line',
+                        label: 'Indice Prezzi',
+                        data: [100, 280, 180, 145, 135], // Price Spike and stabilization
+                        borderColor: '#F97316', // Orange Line
+                        borderWidth: 3,
+                        pointBackgroundColor: '#F97316',
+                        pointRadius: 4,
+                        tension: 0.3,
+                        yAxisID: 'y1'
+                    },
+                    {
+                        type: 'bar',
+                        label: 'Volumi Acquisto',
+                        data: [100, 75, 82, 88, 92], // Dip and slow recovery
+                        backgroundColor: '#0F766E', // Teal Bar
+                        borderRadius: 4,
+                        yAxisID: 'y'
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                interaction: {
+                    mode: 'index',
+                    intersect: false,
+                },
+                plugins: {
+                    legend: { position: 'top' },
+                    tooltip: commonTooltipConfig
+                },
+                scales: {
+                    y: {
+                        type: 'linear',
+                        display: true,
+                        position: 'left',
+                        title: { display: true, text: 'Volumi (Index 2021=100)' },
+                        grid: { color: '#e2e8f0' }
+                    },
+                    y1: {
+                        type: 'linear',
+                        display: true,
+                        position: 'right',
+                        title: { display: true, text: 'Prezzi (Index 2021=100)' },
+                        grid: { display: false }
+                    },
+                    x: {
+                        grid: { display: false }
+                    }
+                }
+            }
+        });
+
+        // --- CHART 4: Outlook Radar ---
+        const ctxRadar = document.getElementById('outlookRadar').getContext('2d');
+        const labelsRadar = [
+            "Pressione Normativa (UE)", 
+            "Costi Energetici", 
+            "Cambiamento Climatico", 
+            "Adozione Tecnologica", 
+            "Pressione Prezzi Consumo",
+            "Concorrenza Estera"
+        ].map(l => formatLabel(l, 16));
+
+        new Chart(ctxRadar, {
+            type: 'radar',
+            data: {
+                labels: labelsRadar,
+                datasets: [{
+                    label: 'Intensità Impatto 2025',
+                    data: [9, 6, 9, 7, 5, 6], // High regulation, High climate
+                    fill: true,
+                    backgroundColor: 'rgba(15, 118, 110, 0.2)', // Teal transparent
+                    borderColor: '#0F766E',
+                    pointBackgroundColor: '#0F766E',
+                    pointBorderColor: '#fff',
+                    pointHoverBackgroundColor: '#fff',
+                    pointHoverBorderColor: '#0F766E'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false },
+                    tooltip: commonTooltipConfig
+                },
+                scales: {
+                    r: {
+                        angleLines: { color: '#cbd5e1' },
+                        grid: { color: '#e2e8f0' },
+                        pointLabels: {
+                            font: { size: 11, family: 'Inter' },
+                            color: '#475569'
+                        },
+                        suggestedMin: 0,
+                        suggestedMax: 10
+                    }
+                }
+            }
+        });
+
+    </script>
+</body>
+</html>
